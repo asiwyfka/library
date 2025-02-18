@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - include:
+     file: db/changelog/changeset/create-users-table.yaml
+  - include:
+      file: db/changelog/changeset/create-books-table.yaml
+  - include:
+      file: db/changelog/changeset/create-loans-table.yaml
+  - changeSet:
+      id: insert-users
+      author: Avdeyev Viktor
+      changes:
+        - sqlFile:
+           path: db/changelog/changeset/insert-users.sql
+           splitStatements: true
+           endDelimiter: ";"
+  - changeSet:
+      id: insert-books
+      author: Avdeyev Viktor
+      changes:
+        - sqlFile:
+            path: db/changelog/changeset/insert-books.sql
+            splitStatements: true
+            endDelimiter: ";"
