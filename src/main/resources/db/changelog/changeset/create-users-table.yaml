@@ -35,7 +35,7 @@ databaseChangeLog:
                   defaultValueComputed: CURRENT_TIMESTAMP
               - column:
                   name: role
-                  type: VARCHAR(25)
+                  type: VARCHAR
                   constraints:
                     nullable: false
                   defaultValue: 'READER'
