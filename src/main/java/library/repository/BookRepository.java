@@ -27,7 +27,7 @@ public interface BookRepository {
      * Поиск книги по id в базе.
      *
      * @param bookId уникальный идентификатор книги
-     * @return объект типа {@link Book}, если найден
+     * @return объект типа {@link Book}, если найден, иначе {@link Optional#empty()}
      */
     Optional<Book> findById(Long bookId);
 
@@ -35,7 +35,7 @@ public interface BookRepository {
      * Поиск книги по названию.
      *
      * @param title название книги
-     * @return объект типа {@link Book}, если найден
+     * @return объект типа {@link Book}, если найден, иначе {@link Optional#empty()}
      */
     Optional<Book> findByTitle(String title);
 
@@ -89,7 +89,7 @@ public interface BookRepository {
      * Обновление книги в базе.
      *
      * @param book обновленные данные книги
-     * @return обновленный объект типа {@link Book}
+     * @return обновленный объект типа {@link Book}, если книга найдена, иначе {@link Optional#empty()}
      */
-    Book update(Book book);
+    Optional<Book> update(Book book);
 }
