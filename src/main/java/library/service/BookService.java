@@ -87,5 +87,5 @@ public interface BookService {
      * @param book книга с обновленными данными
      * @return обновленная книга
      */
-    Book update(Book book);
+    Optional<Book> update(Book book);
 }

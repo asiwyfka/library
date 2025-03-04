@@ -23,7 +23,7 @@ public interface LoanService {
      * Поиск займа по ID.
      *
      * @param loanId уникальный идентификатор займа
-     * @return объект {@link Loan}, если найден
+     * @return объект {@link Loan}, если найден, иначе {@link Optional#empty()}
      */
     Optional<Loan> findById(Long loanId);
 
@@ -53,7 +53,7 @@ public interface LoanService {
     /**
      * Обновление статуса возврата для займа.
      *
-     * @param loanId уникальный идентификатор займа
+     * @param loanId   уникальный идентификатор займа
      * @param returned статус возврата
      */
     void updateReturnStatus(Long loanId, Boolean returned);

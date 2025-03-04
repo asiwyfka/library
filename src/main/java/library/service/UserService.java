@@ -24,7 +24,7 @@ public interface UserService {
      * Поиск пользователя по ID.
      *
      * @param userId уникальный идентификатор пользователя
-     * @return объект {@link User}, если найден
+     * @return объект {@link User}, если найден, иначе {@link Optional#empty()}
      */
     Optional<User> findById(Long userId);
 
@@ -32,7 +32,7 @@ public interface UserService {
      * Поиск пользователей по имени.
      *
      * @param firstName имя пользователя
-     * @return список пользователей с данным именем
+     * @return список пользователей с данным именем (пустой список, если не найдены)
      */
     List<User> findByFirstName(String firstName);
 
@@ -40,7 +40,7 @@ public interface UserService {
      * Поиск пользователей по фамилии.
      *
      * @param lastName фамилия пользователя
-     * @return список пользователей с данной фамилией
+     * @return список пользователей с данной фамилией (пустой список, если не найдены)
      */
     List<User> findByLastName(String lastName);
 
@@ -48,7 +48,7 @@ public interface UserService {
      * Поиск пользователей, зарегистрированных после указанной даты.
      *
      * @param date дата регистрации
-     * @return список пользователей, зарегистрированных после указанной даты
+     * @return список пользователей, зарегистрированных после указанной даты (пустой список, если не найдены)
      */
     List<User> findByDateRegistrationAfter(LocalDate date);
 
@@ -65,14 +65,14 @@ public interface UserService {
      *
      * @param userId идентификатор пользователя для обновления
      * @param updatedUser объект с обновленными данными
-     * @return обновленный пользователь
+     * @return обновленный пользователь, если найден, иначе {@link Optional#empty()}
      */
-    User update(Long userId, User updatedUser);
+    Optional<User> update(Long userId, User updatedUser);
 
     /**
      * Удаление пользователя по ID.
      *
      * @param userId уникальный идентификатор пользователя
      */
-    void deleteById(Long userId);
+    void deleteById(Long userId);  // Изменено на void
 }

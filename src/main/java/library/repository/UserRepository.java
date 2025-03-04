@@ -28,7 +28,7 @@ public interface UserRepository {
      * Найти пользователя по ID.
      *
      * @param userId ID пользователя.
-     * @return Объект User, если найден.
+     * @return Optional с объектом User, если найден.
      */
     Optional<User> findById(Long userId);
 
@@ -69,9 +69,9 @@ public interface UserRepository {
      *
      * @param userId ID пользователя.
      * @param updatedUser объект пользователя с новыми данными.
-     * @return обновленный объект пользователя.
+     * @return Optional с обновленным объектом пользователя.
      */
-    User update(Long userId, User updatedUser);
+    Optional<User> update(Long userId, User updatedUser);
 
     /**
      * Удалить пользователя по ID.
