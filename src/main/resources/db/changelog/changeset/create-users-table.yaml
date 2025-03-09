@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-table
+      author: Avdeyev Viktor
+      changes:
+        - tagDatabase:
+            tag: step1
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: user_id
+                  type: SERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: VARCHAR(25)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: birth_date
+                  type: DATE
+              - column:
+                  name: date_registration
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: role
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+                  defaultValue: 'READER'
+      rollback:
+        - dropTable:
+            tableName: users

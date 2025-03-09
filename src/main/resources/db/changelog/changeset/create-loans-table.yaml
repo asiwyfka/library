@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-loans-table
+      author: Avdeyev Viktor
+      changes:
+        - tagDatabase:
+           tag: step3
+        - createTable:
+            tableName: loans
+            columns:
+              - column:
+                  name: loan_id
+                  type: SERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_loans_users  # Внешний ключ для связи с таблицей users
+                    references: users(user_id)  # Ссылается на поле user_id в таблице users
+                    onDelete: CASCADE
+                    onUpdate: CASCADE
+              - column:
+                  name: book_id
+                  type: INT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_loans_books  # Внешний ключ для связи с таблицей books
+                    references: books(book_id)  # Ссылается на поле book_id в таблице books
+                    onDelete: CASCADE
+                    onUpdate: CASCADE
+              - column:
+                  name: loan_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: return_date
+                  type: TIMESTAMP
+              - column:
+                  name: returned
+                  type: BOOLEAN
+                  defaultValue: false
+      rollback:
+        - dropTable:
+            tableName: loans

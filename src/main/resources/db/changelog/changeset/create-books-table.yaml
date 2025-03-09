@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-table
+      author: Avdeyev Viktor
+      changes:
+        - tagDatabase:
+           tag: step2
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: book_id
+                  type: SERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author
+                  type: VARCHAR(50)
+              - column:
+                  name: published_year
+                  type: INT
+              - column:
+                  name: page_count
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: available
+                  type: BOOLEAN
+                  defaultValue: true
+              - column:
+                  name: added_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+      rollback:
+        - dropTable:
+            tableName: books
