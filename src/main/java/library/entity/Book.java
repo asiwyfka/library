@@ -53,7 +53,7 @@ public class Book {
     private Integer publishedYear;
 
     /**
-     * Количество станиц в книге.
+     * Количество страниц в книге.
      */
     @Column(name = "page_count", nullable = false)
     @NotNull(message = "Page count cannot be null")
