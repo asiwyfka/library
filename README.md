@@ -1,4 +1,4 @@
-Стэк: Spring Boot, Lombok Maven, Docker, OpenApi, Hibernate, PostgrSQL, Liquibase
+Стэк: Spring Boot, Lombok, Maven, Docker, OpenApi, Hibernate, PostgrSQL, Liquibase
 
 Реализовано: 
 - монолитная структура в виде слоев репо-сервис-контроллер,
