@@ -4,7 +4,7 @@ info:
   description: Приложение книжной библиотеки
   version: 1.0.0
 servers:
-  - url: http://localhost:8080/library
+  - url: http://localhost:8080
     description: Dev server
 paths:
   /books:
