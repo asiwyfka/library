@@ -33,7 +33,7 @@ public class LoanController {
      *
      * @return список всех займов
      */
-    @Operation(summary = "Получить список всех займов")
+    @Operation(summary = "Метод позволяет получить список всех займов")
     @GetMapping
     public ResponseEntity<List<Loan>> getAllLoans() {
         log.info("getAllLoans - start");
@@ -48,7 +48,7 @@ public class LoanController {
      * @param loanId идентификатор займа
      * @return найденный заем или статус 404, если заем не найден
      */
-    @Operation(summary = "Получить заем по ID")
+    @Operation(summary = "Метод позволяет получить заем по ID")
     @GetMapping("/{loanId}")
     public ResponseEntity<Loan> getLoanById(@PathVariable Long loanId) {
         log.info("getLoanById - start, loanId = {}", loanId);
@@ -70,7 +70,7 @@ public class LoanController {
      * @param userId идентификатор пользователя
      * @return список займов пользователя
      */
-    @Operation(summary = "Получить список займов по ID пользователя")
+    @Operation(summary = "Метод позволяет получить список займов по ID пользователя")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Loan>> getLoansByUserId(@PathVariable Long userId) {
         log.info("getLoansByUserId - start, userId = {}", userId);
@@ -84,7 +84,7 @@ public class LoanController {
      *
      * @return список незавершенных займов
      */
-    @Operation(summary = "Получить список незавершенных займов")
+    @Operation(summary = "Метод позволяет получить список незавершенных займов")
     @GetMapping("/not-returned")
     public ResponseEntity<List<Loan>> getNotReturnedLoans() {
         log.info("getNotReturnedLoans - start");
@@ -99,7 +99,7 @@ public class LoanController {
      * @param loan объект займа, который нужно добавить
      * @return добавленный заем
      */
-    @Operation(summary = "Добавить новый заем")
+    @Operation(summary = "Метод позволяет добавить новый заем")
     @PostMapping
     public ResponseEntity<Loan> addLoan(@RequestBody Loan loan) {
         log.info("addLoan - start, заем = {}", loan);
@@ -116,7 +116,7 @@ public class LoanController {
      * @param returned статус возврата
      * @return статус 204 (No Content), если статус обновлен, или 404, если заем не найден
      */
-    @Operation(summary = "Обновить статус возврата займа")
+    @Operation(summary = "Метод позволяет обновить статус возврата займа")
     @PutMapping("/{loanId}/return-status")
     public ResponseEntity<Void> updateReturnStatus(@PathVariable Long loanId, @RequestParam Boolean returned) {
         log.info("updateReturnStatus - start, loanId = {}, возвращен = {}", loanId, returned);
@@ -137,7 +137,7 @@ public class LoanController {
      * @param loanId идентификатор займа
      * @return статус 204 (No Content) или 404, если заем не найден
      */
-    @Operation(summary = "Удалить заем по ID")
+    @Operation(summary = "Метод позволяет удалить заем по ID")
     @DeleteMapping("/{loanId}")
     public ResponseEntity<Void> deleteLoan(@PathVariable Long loanId) {
         log.info("deleteLoan - start, loanId = {}", loanId);
