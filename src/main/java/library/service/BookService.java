@@ -84,8 +84,9 @@ public interface BookService {
     /**
      * Обновление книги.
      *
-     * @param book книга с обновленными данными
+     * @param bookId идентификатор книги для обновления
+     * @param updatedBook объект с обновленными данными
      * @return обновленная книга
      */
-    Optional<Book> update(Book book);
+    Optional<Book> update(Long bookId, Book updatedBook);
 }

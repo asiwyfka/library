@@ -3,6 +3,8 @@ package library.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -18,7 +20,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Loan {
+public class Loan implements Serializable {
 
     /**
      * Id записи о выдаче.
@@ -26,7 +28,6 @@ public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "loan_id", nullable = false, updatable = false)
-    @NotNull(message = "Loan id cannot be null")
     private Long id;
 
     /**

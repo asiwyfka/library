@@ -6,6 +6,8 @@ import library.entity.Book;
 import library.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,7 @@ public class BookController {
 
     private final BookService bookService;
 
+    private final static Logger logger = LoggerFactory.getLogger(BookController.class);
     /**
      * Метод позволяет получить список всех книг в библиотеке.
      *
@@ -36,7 +39,10 @@ public class BookController {
     @GetMapping
     public ResponseEntity<List<Book>> getAllBooks() {
         log.info("getAllBooks - start");
+        long startTime = System.currentTimeMillis();
         ResponseEntity<List<Book>> response = ResponseEntity.ok(bookService.findAll());
+        long endTime = System.currentTimeMillis() - startTime;
+        logger.info("Duration = {}", endTime);
         log.info("getAllBooks - end, booksCount = {}", response.getBody().size());
         return response;
     }
@@ -105,7 +111,7 @@ public class BookController {
      * Метод позволяет обновить информацию о книге.
      *
      * @param bookId идентификатор книги
-     * @param book   обновленные данные книги
+     * @param book обновленные данные книги
      * @return обновленная книга или статус 404, если книга не найдена
      */
     @Operation(summary = "Метод позволяет обновить информацию о книге")
@@ -114,7 +120,8 @@ public class BookController {
         log.info("updateBook - start, bookId = {}, book = {}", bookId, book);
         book.setId(bookId);
 
-        Optional<Book> updatedBook = bookService.update(book);
+        Optional<Book> updatedBook = bookService.update(bookId, book);
+
         if (updatedBook.isEmpty()) {
             log.warn("updateBook - книга с ID {} не найдена", bookId);
             return ResponseEntity.notFound().build();

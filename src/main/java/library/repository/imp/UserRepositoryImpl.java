@@ -31,21 +31,21 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(readOnly = true)
     public List<User> findAll() {
-        log.debug("findAll - начало");
+        log.info("findAll - начало");
         List<User> users = entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
-        log.debug("findAll - найдено пользователей: {}", users.size());
+        log.info("findAll - найдено пользователей: {}", users.size());
         return users;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<User> findById(Long userId) {
-        log.debug("findById - начало, userId = {}", userId);
+        log.info("findById - начало, userId = {}", userId);
         User user = entityManager.find(User.class, userId);
         if (user == null) {
             log.warn("findById - пользователь с ID {} не найден", userId);
         } else {
-            log.debug("findById - найден пользователь: {}", user);
+            log.info("findById - найден пользователь: {}", user);
         }
         return Optional.ofNullable(user); // Возвращаем Optional.empty() если не найден
     }
@@ -53,22 +53,22 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(readOnly = true)
     public List<User> findByFirstName(String firstName) {
-        log.debug("findByFirstName - начало, firstName = {}", firstName);
+        log.info("findByFirstName - начало, firstName = {}", firstName);
         List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.firstName = :firstName", User.class)
             .setParameter("firstName", firstName)
             .getResultList();
-        log.debug("findByFirstName - найдено пользователей с именем '{}': {}", firstName, users.size());
+        log.info("findByFirstName - найдено пользователей с именем '{}': {}", firstName, users.size());
         return users;
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<User> findByLastName(String lastName) {
-        log.debug("findByLastName - начало, lastName = {}", lastName);
+        log.info("findByLastName - начало, lastName = {}", lastName);
         List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.lastName = :lastName", User.class)
             .setParameter("lastName", lastName)
             .getResultList();
-        log.debug("findByLastName - найдено пользователей с фамилией '{}': {}", lastName, users.size());
+        log.info("findByLastName - найдено пользователей с фамилией '{}': {}", lastName, users.size());
         return users;
     }
 
@@ -100,7 +100,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public Optional<User> update(Long userId, User updatedUser) {
-        log.debug("update - начало, userId = {}", userId);
+        log.info("update - начало, userId = {}", userId);
         Optional<User> optionalUser = findById(userId);
         if (optionalUser.isEmpty()) {
             log.warn("update - пользователь с ID {} не найден", userId);
@@ -119,7 +119,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional
     public void deleteById(Long userId) {
-        log.debug("deleteById - начало, userId = {}", userId);
+        log.info("deleteById - начало, userId = {}", userId);
         Optional<User> optionalUser = findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

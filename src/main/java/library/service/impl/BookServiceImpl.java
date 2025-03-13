@@ -6,6 +6,9 @@ import library.repository.BookRepository;
 import library.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +27,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     @Override
+    @Cacheable(value = "books", key = "'allBooks'")
     public List<Book> findAll() {
         log.info("Запрос на получение всех книг");
         List<Book> books = bookRepository.findAll();
@@ -32,6 +36,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "books", key = "#bookId")
     public Optional<Book> findById(Long bookId) {
         log.info("Поиск книги по ID: {}", bookId);
         return bookRepository.findById(bookId)
@@ -42,6 +47,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "books", key = "#title")
     public Optional<Book> findByTitle(String title) {
         log.info("Поиск книги по названию: {}", title);
         return bookRepository.findByTitle(title)
@@ -52,6 +58,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "books", key = "'availableBooks'")
     public List<Book> findByAvailableTrue() {
         log.info("Поиск всех доступных книг");
         List<Book> books = bookRepository.findByAvailableTrue();
@@ -60,6 +67,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "books", key = "#author")
     public List<Book> findByAuthor(String author) {
         log.info("Поиск книг автора: {}", author);
         List<Book> books = bookRepository.findByAuthor(author);
@@ -72,6 +80,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "books", key = "#year")
     public List<Book> findByPublishedYearAfter(Integer year) {
         log.info("Поиск книг, опубликованных после {}", year);
         List<Book> books = bookRepository.findByPublishedYearAfter(year);
@@ -84,6 +93,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "books", key = "#pageCount")
     public List<Book> findByPageCountGreaterThan(Integer pageCount) {
         log.info("Поиск книг с количеством страниц больше {}", pageCount);
         List<Book> books = bookRepository.findByPageCountGreaterThan(pageCount);
@@ -96,6 +106,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @CacheEvict(value = "books", key = "#book.id")
     public Book save(Book book) {
         log.info("Сохранение книги: {}", book);
         if (book == null) {
@@ -107,8 +118,27 @@ public class BookServiceImpl implements BookService {
         return savedBook;
     }
 
+    @Override
+    @CachePut(value = "books", key = "#bookId")
+    public Optional<Book> update(Long bookId, Book updatedBook) {
+        log.info("Обновление книги с ID: {}, обновленные данные: {}", bookId, updatedBook);
+
+        Optional<Book> existingBook = bookRepository.findById(bookId);
+        if (existingBook.isEmpty()) {
+            log.error("Ошибка: книга с ID {} не найдена для обновления", bookId);
+            throw new NotFoundException("Книга с ID " + bookId + " не найдена для обновления");
+        }
+
+        updatedBook.setId(bookId);
+
+        Book updated = bookRepository.save(updatedBook);
+        log.info("Книга обновлена: {}", updated);
+
+        return Optional.of(updated);
+    }
 
     @Override
+    @CacheEvict(value = "books", key = "#bookId")
     public void deleteById(Long bookId) {
         log.info("Удаление книги с ID: {}", bookId);
         if (bookRepository.findById(bookId).isEmpty()) {
@@ -117,18 +147,5 @@ public class BookServiceImpl implements BookService {
         }
         bookRepository.deleteById(bookId);
         log.info("Книга с ID {} успешно удалена", bookId);
-    }
-
-    @Override
-    public Optional<Book> update(Book book) {
-        log.info("Обновление книги: {}", book);
-        if (book.getId() == null || bookRepository.findById(book.getId()).isEmpty()) {
-            log.error("Ошибка: невозможно обновить книгу с ID {}, так как она не найдена", book.getId());
-            throw new NotFoundException("Книга с ID " + book.getId() + " не найдена");
-        }
-        Book updatedBook = bookRepository.update(book)
-            .orElseThrow(() -> new NotFoundException("Не удалось обновить книгу с ID " + book.getId()));
-        log.info("Книга обновлена: {}", updatedBook);
-        return Optional.of(updatedBook);
     }
 }
