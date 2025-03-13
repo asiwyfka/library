@@ -14,7 +14,7 @@ import java.util.Optional;
 
 /**
  * Реализация {@link BookRepository}.
- *
+ * <p>
  * Использует {@link EntityManager} для взаимодействия с базой данных.
  *
  * @author Avdeyev Viktor
@@ -138,14 +138,22 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     @Transactional
-    public Optional<Book> update(Book book) {
-        log.info("Обновление книги с ID: {}", book.getId());
-        if (book.getId() == null || !findById(book.getId()).isPresent()) {
-            log.warn("Книга с ID {} не найдена для обновления", book.getId());
+    public Optional<Book> update(Long bookId, Book updatedBook) {
+        log.info("update - начало, bookId = {}", bookId);
+        Optional<Book> optionalBook = findById(bookId);
+        if (optionalBook.isEmpty()) {
+            log.warn("update - книга с ID {} не найдена", bookId);
             return Optional.empty();
         }
-        Book updatedBook = entityManager.merge(book);
-        log.info("Книга обновлена: {}", updatedBook);
-        return Optional.of(updatedBook);
+        Book book = optionalBook.get();
+        book.setTitle(updatedBook.getTitle());
+        book.setAuthor(updatedBook.getAuthor());
+        book.setPublishedYear(updatedBook.getPublishedYear());
+        book.setPageCount(updatedBook.getPageCount());
+        book.setAvailable(updatedBook.isAvailable());
+        book.setAddedAt(updatedBook.getAddedAt() != null ? updatedBook.getAddedAt() : book.getAddedAt());
+        book = entityManager.merge(book);
+        log.info("update - книга обновлена: {}", book);
+        return Optional.of(book);
     }
 }

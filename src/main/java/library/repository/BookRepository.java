@@ -86,10 +86,11 @@ public interface BookRepository {
     void deleteById(Long bookId);
 
     /**
-     * Обновление книги в базе.
+     * Обновить данные книги по ID.
      *
-     * @param book обновленные данные книги
-     * @return обновленный объект типа {@link Book}, если книга найдена, иначе {@link Optional#empty()}
+     * @param bookId ID книги.
+     * @param updatedBook объект книги с новыми данными.
+     * @return Optional с обновленным объектом пользователя.
      */
-    Optional<Book> update(Book book);
+    Optional<Book> update(Long bookId, Book updatedBook);
 }
