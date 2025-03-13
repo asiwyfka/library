@@ -6,6 +6,9 @@ import library.repository.UserRepository;
 import library.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Cacheable(value = "users", key = "'allUsers'")
     public List<User> findAll() {
         log.info("Запрос на получение всех пользователей");
         List<User> users = userRepository.findAll();
@@ -31,6 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#userId")
     public Optional<User> findById(Long userId) {
         log.info("Поиск пользователя по ID: {}", userId);
         return userRepository.findById(userId)
@@ -41,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#firstName")
     public List<User> findByFirstName(String firstName) {
         log.info("Поиск пользователей с именем: {}", firstName);
         List<User> users = userRepository.findByFirstName(firstName);
@@ -53,6 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#lastName")
     public List<User> findByLastName(String lastName) {
         log.info("Поиск пользователей с фамилией: {}", lastName);
         List<User> users = userRepository.findByLastName(lastName);
@@ -65,6 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#date")
     public List<User> findByDateRegistrationAfter(LocalDate date) {
         log.info("Поиск пользователей, зарегистрированных после {}", date);
         List<User> users = userRepository.findByDateRegistrationAfter(date);
@@ -77,6 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", key = "#user.id")
     public User save(User user) {
         log.info("Сохранение пользователя: {}", user);
         if (user == null) {
@@ -89,6 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CachePut(value = "users", key = "#userId")
     public Optional<User> update(Long userId, User updatedUser) {
         log.info("Обновление пользователя с ID: {}, обновленные данные: {}", userId, updatedUser);
         Optional<User> user = userRepository.findById(userId);
@@ -103,6 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", key = "#userId")
     public void deleteById(Long userId) {
         log.info("Удаление пользователя с ID: {}", userId);
         if (userRepository.findById(userId).isEmpty()) {

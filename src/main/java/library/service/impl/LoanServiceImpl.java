@@ -6,6 +6,8 @@ import library.repository.LoanRepository;
 import library.service.LoanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
 
     @Override
+    @Cacheable(value = "loans", key = "'allLoans'")
     public List<Loan> findAll() {
         log.info("findAll - начало");
         List<Loan> loans = loanRepository.findAll();
@@ -32,6 +35,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @Cacheable(value = "loans", key = "#loanId")
     public Optional<Loan> findById(Long loanId) {
         log.info("findById - начало, loanId = {}", loanId);
         Optional<Loan> loan = loanRepository.findById(loanId);
@@ -44,6 +48,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @Cacheable(value = "loans", key = "#userId")
     public List<Loan> findByUserId(Long userId) {
         log.info("findByUserId - начало, userId = {}", userId);
         List<Loan> loans = loanRepository.findByUserId(userId);
@@ -56,6 +61,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @Cacheable(value = "loans", key = "'returnedLoans'")
     public List<Loan> findByReturnedFalse() {
         log.info("findByReturnedFalse - начало");
         List<Loan> loans = loanRepository.findByReturnedFalse();
@@ -68,6 +74,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @CacheEvict(value = "loans", key = "#loan.id")
     public Loan save(Loan loan) {
         log.info("save - начало, заем = {}", loan);
         if (loan == null) {
@@ -80,6 +87,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @CacheEvict(value = "loans", key = "#loanId")
     public void updateReturnStatus(Long loanId, Boolean returned) {
         log.info("updateReturnStatus - начало, loanId = {}, возвращен = {}", loanId, returned);
         Optional<Loan> loan = loanRepository.findById(loanId);
@@ -92,6 +100,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
+    @CacheEvict(value = "loans", key = "#loanId")
     public void deleteById(Long loanId) {
         log.info("deleteById - начало, loanId = {}", loanId);
         Optional<Loan> loan = loanRepository.findById(loanId);

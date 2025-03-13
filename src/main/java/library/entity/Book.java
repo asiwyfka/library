@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Book {
+public class Book implements Serializable {
 
     /**
      * Id книги.
@@ -28,7 +30,6 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id", nullable = false, updatable = false)
-    @NotNull(message = "Book id cannot be null")
     private Long id;
 
     /**
@@ -64,7 +65,7 @@ public class Book {
      */
     @Column(nullable = false)
     @NotNull(message = "Book available cannot be null")
-    private Boolean available = true;
+    private boolean available = true;
 
     /**
      * Дата добавления книги в библиотеку.
@@ -77,6 +78,6 @@ public class Book {
      * Список займов, связанных с книгой.
      * Связь с сущностью Loan.
      */
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Loan> loans;
 }
